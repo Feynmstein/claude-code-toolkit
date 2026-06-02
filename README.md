@@ -45,7 +45,11 @@ toolkit/
 
 - 已安装 Claude Code
 - 已安装 Git
-- 已安装 PowerShell（Windows 自带）
+- 已安装 PowerShell 5.1+（Windows 10+ 自带，无需额外安装）
+- 如果脚本报 `cannot be loaded because running scripts is disabled`，先以管理员身份运行：
+  ```powershell
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+  ```
 
 ### 首次部署（3 步）
 
@@ -282,3 +286,22 @@ git pull                            # 拉取
 - 只更新了 memory → 必须重新跑 `deploy.ps1`（记忆是拷贝到 `~/.claude/` 的）
 - 只更新了 conventions.md → 不需要重新部署（那是给你读的）
 - 更新了 CLAUDE.md 模板 → 手动把改动同步到已有项目的 CLAUDE.md，不需要重跑整个脚本
+
+### Q6：运行 deploy.ps1 出现乱码或解析错误（UnexpectedToken）？
+
+这是 UTF-8 编码问题。`deploy.ps1` 包含中文字符，**必须以 UTF-8 with BOM 编码保存**，否则 Windows PowerShell 5.1 会按系统 ANSI 编码（GBK）解析，导致中文字符被错误切割成多个 token。
+
+**诊断方法**：用记事本打开 `deploy.ps1` → 另存为 → 看底部编码是否显示 "UTF-8 with BOM"。
+
+**修复方法**：
+```powershell
+# 用 PowerShell 重新保存为 UTF-8 with BOM
+$content = [System.IO.File]::ReadAllText("D:\claude-code-toolkit\deploy.ps1", [System.Text.Encoding]::UTF8)
+[System.IO.File]::WriteAllText("D:\claude-code-toolkit\deploy.ps1", $content, [System.Text.UTF8Encoding]::new($true))
+```
+
+> **注意**：部分编辑器（如 VS Code）默认保存为 UTF-8 without BOM。如果你编辑了 `deploy.ps1`，保存时请确认编码为 **UTF-8 with BOM**。
+
+### Q7：deploy.ps1 日志显示「记忆条目 : 0 新增」但明明有记忆文件？
+
+这是 PowerShell 5.1 的 `Get-ChildItem -Exclude` 已知 bug —— 当 Path 不以 `\*` 结尾时，`-Exclude` 参数不生效。已在当前版本的 `deploy.ps1` 中修复（`"$memorySourceDir\*"`）。如果你遇到此问题，请 `git pull` 获取最新脚本。

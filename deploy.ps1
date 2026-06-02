@@ -1,10 +1,13 @@
-<#
+﻿<#
 .SYNOPSIS
     Claude Code Toolkit 一键部署脚本
 .DESCRIPTION
     将 toolkit 中的模板、记忆条目部署到目标项目。
     模板文件：覆盖（CLAUDE.md、settings）
     记忆文件：新文件添加，已有文件比较时间戳后决定是否更新
+.NOTES
+    要求 PowerShell 5.1+
+    本脚本含中文字符，必须以 UTF-8 with BOM 编码保存，否则 Windows PowerShell 无法解析
 .PARAMETER ProjectPath
     目标项目的绝对路径（必需）
 .PARAMETER MemoryOnly
@@ -186,7 +189,8 @@ Write-Host ""
 Write-Host "[3/4] 部署记忆条目" -ForegroundColor Cyan
 
 $memorySourceDir = Join-Path $scriptDir "memory"
-$memoryFiles = Get-ChildItem -Path $memorySourceDir -File -Exclude "MEMORY.md"
+# 注意：Path 必须以 \* 结尾，否则 -Exclude 在 PowerShell 5.1 中不生效
+$memoryFiles = Get-ChildItem -Path "$memorySourceDir\*" -File -Exclude "MEMORY.md"
 
 $added = 0
 $updated = 0
