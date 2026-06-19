@@ -179,6 +179,29 @@ Thumbs.db
     } else {
         Write-Skip ".gitignore 已存在"
     }
+
+    # --- docs/ 文档目录结构 ---
+    $docsSourceDir = Join-Path $scriptDir "templates\docs-structure"
+    $docsDestDir = Join-Path $ProjectPath "docs"
+
+    if (-not (Test-Path $docsDestDir)) {
+        New-Item -ItemType Directory -Path $docsDestDir -Force | Out-Null
+        Write-Step "创建 docs/ 目录"
+    }
+
+    $docsTemplateFiles = Get-ChildItem -Path "$docsSourceDir\*" -File
+    foreach ($docFile in $docsTemplateFiles) {
+        $destDocPath = Join-Path $docsDestDir $docFile.Name
+        if (-not (Test-Path $destDocPath)) {
+            # 读取模板内容并替换占位符
+            $content = Get-Content $docFile.FullName -Raw -Encoding UTF8
+            $content = $content -replace '\{项目名\}', $ProjectName
+            $content | Out-File -FilePath $destDocPath -Encoding UTF8
+            Write-Step "docs/$($docFile.Name) 已创建"
+        } else {
+            Write-Skip "docs/$($docFile.Name) 已存在"
+        }
+    }
 }
 
 # ---------------------------------------------------------------------------
@@ -291,6 +314,8 @@ if (-not $MemoryOnly) {
     Write-Host "   CLAUDE.md                  $ProjectPath\CLAUDE.md"
     Write-Host "   settings.local.json        $claudeDir\settings.local.json"
     Write-Host "   .gitignore                 $gitignore"
+    Write-Host "   docs/README.md             $ProjectPath\docs\README.md"
+    Write-Host "   docs/TASK.md               $ProjectPath\docs\TASK.md"
 }
 Write-Host " 记忆条目 : $added 新增, $updated 更新, $skipped 跳过"
 Write-Host " 记忆路径 : $memoryDestRoot"
@@ -301,7 +326,8 @@ Write-Host ""
 if (-not $MemoryOnly) {
     Write-Host "下一步：" -ForegroundColor Yellow
     Write-Host "  1. 编辑 $ProjectPath\CLAUDE.md，将占位符替换为项目实际内容"
-    Write-Host "  2. 根据项目修改 $claudeDir\settings.local.json"
-    Write-Host "  3. 运行 'git init' 初始化版本控制（如需要）"
+    Write-Host "  2. 编辑 $ProjectPath\docs\README.md 和 TASK.md，填入项目名和具体信息"
+    Write-Host "  3. 根据项目修改 $claudeDir\settings.local.json"
+    Write-Host "  4. 运行 'git init' 初始化版本控制（如需要）"
     Write-Host ""
 }

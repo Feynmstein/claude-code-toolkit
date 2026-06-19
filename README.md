@@ -20,6 +20,7 @@
 ```
 toolkit/
 ├── README.md                          ← 你正在读的文件
+├── CLAUDE.md                           ← 本仓库自身的项目指引
 ├── deploy.ps1                          ← 一键部署脚本
 ├── conventions.md                      ← 核心约定速查手册（给你自己读的）
 │
@@ -65,7 +66,7 @@ toolkit/
 
 ```powershell
 # 方式 A：从 GitHub clone（推荐）
-git clone https://github.com/YOUR_ACCOUNT/claude-code-toolkit.git D:\claude-code-toolkit
+git clone https://github.com/Feynmstein/claude-code-toolkit.git D:\claude-code-toolkit
 
 # 方式 B：从 U 盘/共享文件夹拷贝
 cp -r E:\claude-code-toolkit D:\claude-code-toolkit
@@ -93,13 +94,14 @@ cd D:\claude-code-toolkit
 1. 在目标项目创建目录结构和 .claude/ 文件夹
 2. 拷贝 CLAUDE-md-template.md → <项目>/CLAUDE.md
 3. 拷贝 settings-template.json → <项目>/.claude/settings.local.json
-4. 拷贝 memory/*.md → ~/.claude/projects/<项目名>/memory/
-5. 合并 MEMORY.md 索引（不删除本机已有条目）
-6. 在项目目录创建 .gitignore（如不存在）
+4. 拷贝 docs-structure 模板 → <项目>/docs/（README.md + TASK.md）
+5. 拷贝 memory/*.md → ~/.claude/projects/<项目名>/memory/
+6. 合并 MEMORY.md 索引（不删除本机已有条目）
+7. 在项目目录创建 .gitignore（如不存在）
 ```
 
 **关键特性**：
-- **模板文件**：每次部署都会用最新版覆盖（CLAUDE.md 模板、settings 模板）
+- **模板文件**：每次部署都会用最新版覆盖（CLAUDE.md 模板、settings 模板、docs 结构模板）
 - **记忆文件**：新文件直接添加，已有文件比较修改时间后决定是否覆盖
 - **MEMORY.md**：toolkit 中的新条目追加到本机已有索引，不删除已有行
 
