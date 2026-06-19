@@ -6,3 +6,4 @@
 - [可执行文档即测试](docs-as-testing.md) — 写文档发现的 Bug 单元测试永远找不到
 - [API 迁移提示词](api-migration-prompt.md) — 五要素结构，playout 实战一次成功零返工
 - [Session 管理三大纪律](session-discipline.md) — 50% 上下文红线、三回合止损、不喂参考意见
+- [约定漂移与文档合规自检](convention-drift.md) — 文档约定必然漂移，需要自检清单反制

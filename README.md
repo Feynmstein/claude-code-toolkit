@@ -30,11 +30,15 @@ toolkit/
 │   ├── project-separation.md           #   项目分离原则
 │   ├── docs-as-testing.md              #   可执行文档即测试
 │   ├── api-migration-prompt.md         #   API 迁移提示词五要素
-│   └── session-discipline.md           #   Session 管理三大纪律
+│   ├── session-discipline.md           #   Session 管理三大纪律
+│   └── convention-drift.md             #   约定漂移与文档合规自检
 │
 ├── templates/                          ← 可复用的项目模板
 │   ├── CLAUDE-md-template.md           #   通用 CLAUDE.md 模板
-│   └── settings-template.json          #   推荐的项目级 settings
+│   ├── settings-template.json          #   推荐的项目级 settings
+│   └── docs-structure/                 #   文档目录结构模板
+│       ├── README.md                   #     导航索引模板
+│       └── TASK.md                     #     任务文档模板
 │
 └── notes/                              ← 实战经验案例
     ├── playout-lessons.md              #   playout 重写的 9 条可迁移经验
